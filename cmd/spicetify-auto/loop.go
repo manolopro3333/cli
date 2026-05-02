@@ -1,6 +1,10 @@
 package main
 
-import "time"
+import (
+	"time"
+
+	"github.com/manolopro3333/cli/src/utils"
+)
 
 type loopConfig struct {
 	Update   updateConfig
@@ -24,7 +28,10 @@ func runLoop(cfg loopConfig) {
 }
 
 func runCycle(updateCfg updateConfig) bool {
-	updated, _ := checkAndUpdate(updateCfg)
+	updated, err := checkAndUpdate(updateCfg)
+	if err != nil {
+		_ = runSpicetifyUpdate()
+	}
 	if updated {
 		return true
 	}
@@ -42,7 +49,9 @@ func runCycle(updateCfg updateConfig) bool {
 	needsApply := spotifyChanged || patchMissing || state.PendingApply
 
 	if needsApply {
-		if isSpotifyRunning() {
+		if utils.IsAutoApplyPaused() {
+			state.PendingApply = false
+		} else if isSpotifyRunning() {
 			state.PendingApply = true
 		} else if err := runSpicetifyApply(); err != nil {
 			state.PendingApply = true

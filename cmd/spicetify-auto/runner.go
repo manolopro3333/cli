@@ -19,6 +19,18 @@ func runSpicetifyApply() error {
 	return cmd.Run()
 }
 
+func runSpicetifyUpdate() error {
+	spicetifyPath, err := exec.LookPath("spicetify")
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command(spicetifyPath, "-q", "update")
+	cmd.Stdout = io.Discard
+	cmd.Stderr = io.Discard
+	return cmd.Run()
+}
+
 func isSpotifyRunning() bool {
 	switch runtime.GOOS {
 	case "windows":

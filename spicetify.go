@@ -12,12 +12,13 @@ import (
 	"strings"
 	"sync"
 
-	colorable "github.com/mattn/go-colorable"
-	"github.com/pterm/pterm"
 	"github.com/manolopro3333/cli/src/cmd"
+	"github.com/manolopro3333/cli/src/service"
 	spotifystatus "github.com/manolopro3333/cli/src/status/spotify"
 	"github.com/manolopro3333/cli/src/utils"
 	"github.com/manolopro3333/cli/src/utils/isAdmin"
+	colorable "github.com/mattn/go-colorable"
+	"github.com/pterm/pterm"
 )
 
 var (
@@ -267,6 +268,10 @@ func main() {
 
 		watchGroup.Wait()
 		return
+
+	case "service":
+		service.Start(version)
+		return
 	}
 
 	cmd.InitPaths()
@@ -389,6 +394,9 @@ enable-devtools     Enable Spotify's developer tools.
 watch               Enter watch mode.
                     To update on change, use with any combination of the following flags:
                         "-e" (for extensions),
+
+	service             Run background auto-update and auto-reapply monitor.
+	                   Use at login/startup for automatic maintenance.
                         "-a" (for custom apps),
                         "-s" (for the active theme; color.ini, user.css, theme.js, and assets)
                         "-l" (for all of the above)

@@ -165,6 +165,29 @@ function Install-Spicetify {
     Write-Host -Object 'spicetify was successfully installed!' -ForegroundColor 'Green'
   }
 }
+
+function Enable-SpicetifyServiceStartup {
+  [CmdletBinding()]
+  param ()
+  begin {
+    Write-Host -Object 'Configuring automatic startup monitor...' -NoNewline
+  }
+  process {
+    $startupDir = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Startup'
+    $startupFile = Join-Path $startupDir 'Spicetify Service.cmd'
+
+    if (-not (Test-Path -Path $startupDir)) {
+      New-Item -Path $startupDir -ItemType Directory -Force | Out-Null
+    }
+
+    $spicetifyExe = Join-Path $spicetifyFolderPath 'spicetify.exe'
+    $content = "@echo off`r`ncd /d `"$spicetifyFolderPath`"`r`nstart `"`" /min `"$spicetifyExe`" service`r`n"
+    Set-Content -Path $startupFile -Value $content -Encoding Ascii
+  }
+  end {
+    Write-Success
+  }
+}
 #endregion Functions
 
 #region Main
@@ -206,6 +229,7 @@ else {
 #region Spicetify
 Move-OldSpicetifyFolder
 Install-Spicetify
+Enable-SpicetifyServiceStartup
 Write-Host -Object "`nRun" -NoNewline
 Write-Host -Object ' spicetify -h ' -NoNewline -ForegroundColor 'Cyan'
 Write-Host -Object 'to get started'

@@ -96,6 +96,10 @@ func Apply(spicetifyVersion string) {
 	if len(patchSection.Keys()) > 0 {
 		Patch()
 	}
+
+	if err := utils.SetAutoApplyPaused(false); err != nil {
+		utils.PrintWarning(fmt.Sprintf("Failed to clear auto-apply pause: %s", err.Error()))
+	}
 }
 
 // RefreshTheme updates user.css + theme.js and overwrites custom assets

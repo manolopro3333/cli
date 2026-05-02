@@ -20,7 +20,7 @@ func Start(spicetifyVersion string) {
 	setting := cfg.GetSection("Setting")
 	serviceSection := cfg.GetSection("Service")
 
-	if !serviceSection.Key("auto_update").MustBool(false) {
+	if !serviceSection.Key("auto_update").MustBool(true) {
 		utils.PrintInfo("Service is disabled in config (Service.auto_update=0).")
 		return
 	}
@@ -39,11 +39,9 @@ func Start(spicetifyVersion string) {
 	}
 
 	for {
-		time.Sleep(interval)
-
 		cfg = utils.ParseConfig(cmd.GetConfigPath())
 		serviceSection = cfg.GetSection("Service")
-		if !serviceSection.Key("auto_update").MustBool(false) {
+		if !serviceSection.Key("auto_update").MustBool(true) {
 			utils.PrintInfo("Service disabled, stopping background monitor.")
 			return
 		}
@@ -65,10 +63,12 @@ func Start(spicetifyVersion string) {
 			utils.PrintInfo("Checking for Spicetify updates or reapplying patch...")
 			heal(spicetifyVersion, prefsPath, backupPath, backupVersion)
 			lastState = snapshotState(appsPath)
+			time.Sleep(interval)
 			continue
 		}
 
 		lastState = currentState
+		time.Sleep(interval)
 	}
 }
 
@@ -117,6 +117,11 @@ func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) {
 	backStat := backupstatus.Get(prefsPath, backupPath, backupVersion)
 	if !backStat.IsBackuped() {
 		utils.PrintWarning("Backup is not ready; will reapply on next cycle.")
+		return
+	}
+
+	if utils.IsAutoApplyPaused() {
+		utils.PrintInfo("Auto-apply is paused because user restored Spotify.")
 		return
 	}
 

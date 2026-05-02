@@ -166,5 +166,9 @@ func Restore() {
 		utils.Fatal(err)
 	}
 
+	if err := utils.SetAutoApplyPaused(true); err != nil {
+		utils.PrintWarning(fmt.Sprintf("Failed to set auto-apply pause: %s", err.Error()))
+	}
+
 	spinner.Success("Restored Spotify")
 }
