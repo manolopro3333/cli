@@ -89,7 +89,7 @@ function Get-Spicetify {
       Write-Host -Object 'Fetching the latest spicetify version...' -NoNewline
       try {
         # Use GitHub redirect instead of API to avoid ratelimits
-        $response = Invoke-WebRequest -Uri "https://github.com/$repoOwner/$repoName/releases/latest" -MaximumRedirection 0 -ErrorAction SilentlyContinue
+        $response = Invoke-WebRequest -Uri "https://github.com/$repoOwner/$repoName/releases/latest" -MaximumRedirection 0 -ErrorAction SilentlyContinue -UseBasicParsing
         $redirectUrl = $response.Headers.Location
         
         if ($redirectUrl) {
