@@ -2,6 +2,8 @@ $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 #region Variables
+$repoOwner = 'manolopro3333'
+$repoName = 'cli'
 $spicetifyFolderPath = "$env:LOCALAPPDATA\spicetify"
 $spicetifyOldFolderPath = "$HOME\spicetify-cli"
 #endregion Variables
@@ -85,7 +87,7 @@ function Get-Spicetify {
     }
     else {
       Write-Host -Object 'Fetching the latest spicetify version...' -NoNewline
-      $latestRelease = Invoke-RestMethod -Uri 'https://api.github.com/repos/spicetify/cli/releases/latest'
+      $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/$repoOwner/$repoName/releases/latest"
       $targetVersion = $latestRelease.tag_name -replace 'v', ''
       Write-Success
     }
@@ -94,7 +96,7 @@ function Get-Spicetify {
   process {
     Write-Host -Object "Downloading spicetify v$targetVersion..." -NoNewline
     $Parameters = @{
-      Uri            = "https://github.com/manolopro3333/cli/releases/download/v$targetVersion/spicetify-$targetVersion-windows-$architecture.zip"
+      Uri            = "https://github.com/$repoOwner/$repoName/releases/download/v$targetVersion/spicetify-$targetVersion-windows-$architecture.zip"
       UseBasicParsin = $true
       OutFile        = $archivePath
     }

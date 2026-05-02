@@ -25,7 +25,7 @@ func Update(currentVersion string) bool {
 	}
 
 	utils.PrintInfo("Latest release: " + tagName)
-	var assetURL string = "https://github.com/spicetify/cli/releases/download/v" + tagName + "/spicetify-" + tagName + "-" + runtime.GOOS + "-"
+	var assetURL string = "https://github.com/manolopro3333/cli/releases/download/v" + tagName + "/spicetify-" + tagName + "-" + runtime.GOOS + "-"
 	var location string = os.TempDir() + "/spicetify-" + tagName
 
 	if runtime.GOARCH == "386" && runtime.GOOS == "windows" {
