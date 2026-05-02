@@ -10,7 +10,7 @@ var version string
 const (
 	repoOwner  = "manolopro3333"
 	repoName   = "cli"
-	binaryName = "spicetify-auto"
+	binaryName = "spicetify"
 )
 
 func main() {

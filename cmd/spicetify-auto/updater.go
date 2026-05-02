@@ -89,7 +89,7 @@ func fetchLatestRelease(owner, repo string) (githubRelease, error) {
 	if err != nil {
 		return githubRelease{}, err
 	}
-	req.Header.Set("User-Agent", "spicetify-auto")
+	req.Header.Set("User-Agent", "spicetify")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -123,7 +123,7 @@ func downloadAsset(url string) (string, error) {
 	if runtime.GOOS == "windows" {
 		suffix = ".exe"
 	}
-	file, err := os.CreateTemp("", "spicetify-auto-*"+suffix)
+	file, err := os.CreateTemp("", "spicetify-*"+suffix)
 	if err != nil {
 		return "", err
 	}
