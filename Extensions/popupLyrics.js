@@ -283,7 +283,7 @@ function PopupLyrics() {
 
 			const body = await fetch(finalURL, {
 				headers: {
-					"x-user-agent": `spicetify v${Spicetify.Config.version} (https://github.com/spicetify/cli)`,
+					"x-user-agent": `spicetify v${Spicetify.Config.version} (https://github.com/manolopro3333/cli)`,
 				},
 			});
 

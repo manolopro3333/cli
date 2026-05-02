@@ -14,10 +14,10 @@ import (
 
 	colorable "github.com/mattn/go-colorable"
 	"github.com/pterm/pterm"
-	"github.com/spicetify/cli/src/cmd"
-	spotifystatus "github.com/spicetify/cli/src/status/spotify"
-	"github.com/spicetify/cli/src/utils"
-	"github.com/spicetify/cli/src/utils/isAdmin"
+	"github.com/manolopro3333/cli/src/cmd"
+	spotifystatus "github.com/manolopro3333/cli/src/status/spotify"
+	"github.com/manolopro3333/cli/src/utils"
+	"github.com/manolopro3333/cli/src/utils/isAdmin"
 )
 
 var (
@@ -501,7 +501,7 @@ upgrade|update      Update spicetify to the latest version if an update is avail
 -v, --version       Print version number and quit
 
 For config information, run "spicetify -h config".
-For more information and reporting bugs: https://github.com/spicetify/cli/`)
+For more information and reporting bugs: https://github.com/manolopro3333/cli/`)
 }
 
 func helpConfig() {

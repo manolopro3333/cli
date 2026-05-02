@@ -15,7 +15,7 @@ import (
 	"strings"
 
 	"github.com/pterm/pterm"
-	"github.com/spicetify/cli/src/utils"
+	"github.com/manolopro3333/cli/src/utils"
 )
 
 // Flag enables/disables preprocesses to be applied
@@ -50,7 +50,7 @@ func applyPatches(input string, patches []Patch) string {
 }
 
 func readRemoteCssMap(tag string, cssTranslationMap *map[string]string) error {
-	var cssMapURL string = "https://raw.githubusercontent.com/spicetify/cli/" + tag + "/css-map.json"
+	var cssMapURL string = "https://raw.githubusercontent.com/manolopro3333/cli/" + tag + "/css-map.json"
 	cssMapResp, err := http.Get(cssMapURL)
 	if err != nil {
 		return err
@@ -1141,7 +1141,7 @@ func FetchLatestTagMatchingVersion(version string) (string, error) {
 	if version == "Dev" {
 		return "Dev", nil
 	}
-	res, err := http.Get("https://api.github.com/repos/spicetify/cli/releases")
+	res, err := http.Get("https://api.github.com/repos/manolopro3333/cli/releases")
 	if err != nil {
 		return "", err
 	}

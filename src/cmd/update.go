@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/spicetify/cli/src/utils"
+	"github.com/manolopro3333/cli/src/utils"
 )
 
 func Update(currentVersion string) bool {

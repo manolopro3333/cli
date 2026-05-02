@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	spotifystatus "github.com/spicetify/cli/src/status/spotify"
-	"github.com/spicetify/cli/src/utils"
+	spotifystatus "github.com/manolopro3333/cli/src/status/spotify"
+	"github.com/manolopro3333/cli/src/utils"
 )
 
 var (

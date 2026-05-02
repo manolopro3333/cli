@@ -1,4 +1,4 @@
-module github.com/spicetify/cli
+module github.com/manolopro3333/cli
 
 go 1.24.2
 

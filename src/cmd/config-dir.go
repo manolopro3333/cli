@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/spicetify/cli/src/utils"
+	"github.com/manolopro3333/cli/src/utils"
 )
 
 // ShowConfigDirectory shows config directory in user's default file manager application

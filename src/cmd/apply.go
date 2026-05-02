@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/spicetify/cli/src/apply"
-	backupstatus "github.com/spicetify/cli/src/status/backup"
-	spotifystatus "github.com/spicetify/cli/src/status/spotify"
-	"github.com/spicetify/cli/src/utils"
+	"github.com/manolopro3333/cli/src/apply"
+	backupstatus "github.com/manolopro3333/cli/src/status/backup"
+	spotifystatus "github.com/manolopro3333/cli/src/status/spotify"
+	"github.com/manolopro3333/cli/src/utils"
 )
 
 // Apply .

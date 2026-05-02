@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/spicetify/cli/src/utils"
+	"github.com/manolopro3333/cli/src/utils"
 )
 
 // Flag enables/disables additional feature

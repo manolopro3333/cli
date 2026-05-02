@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-ini/ini"
 	"github.com/pterm/pterm"
-	"github.com/spicetify/cli/src/utils"
+	"github.com/manolopro3333/cli/src/utils"
 )
 
 // EditColor changes one or multiple colors' values
