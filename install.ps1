@@ -205,8 +205,10 @@ if ($choice -eq 1) {
 }
 else {
   Write-Host -Object 'Starting the spicetify Marketplace installation script..'
+  # Ensure the newly installed spicetify is resolvable in this same session.
+  $env:PATH = "$spicetifyFolderPath;$env:PATH"
   $Parameters = @{
-    Uri             = 'https://raw.githubusercontent.com/spicetify/spicetify-marketplace/main/resources/install.ps1'
+    Uri             = 'https://raw.githubusercontent.com/manolopro3333/marketplace/main/resources/install.ps1'
     UseBasicParsing = $true
   }
   Invoke-WebRequest @Parameters | Invoke-Expression
