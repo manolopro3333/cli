@@ -87,8 +87,26 @@ function Get-Spicetify {
     }
     else {
       Write-Host -Object 'Fetching the latest spicetify version...' -NoNewline
-      $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/$repoOwner/$repoName/releases/latest"
-      $targetVersion = $latestRelease.tag_name -replace 'v', ''
+      try {
+        # Use GitHub redirect instead of API to avoid ratelimits
+        $response = Invoke-WebRequest -Uri "https://github.com/$repoOwner/$repoName/releases/latest" -MaximumRedirection 0 -ErrorAction SilentlyContinue
+        $redirectUrl = $response.Headers.Location
+        
+        if ($redirectUrl) {
+          # Extract version from redirect URL: /releases/tag/v1.2.3 -> 1.2.3
+          $targetVersion = $redirectUrl -replace '.*tag/v?', ''
+        } else {
+          Write-Unsuccess
+          Write-Host -Object "Error: Could not determine latest version"
+          Pause
+          exit
+        }
+      } catch {
+        Write-Unsuccess
+        Write-Host -Object "Error: $_"
+        Pause
+        exit
+      }
       Write-Success
     }
     $archivePath = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "spicetify.zip")
