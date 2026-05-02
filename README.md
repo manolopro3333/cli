@@ -12,11 +12,11 @@
 > **Note (Fork):** This repository is a fork maintained by `manolopro3333` that adapts and maintains the Spicetify command-line client. This project is not my original work; the original source is https://github.com/spicetify/cli and all credits and rights belong to the original repository and its authors. This fork exists to apply fixes, maintenance, and specific improvements to facilitate usage in certain environments.
 
 > To install this fork on Windows (PowerShell), run:
->
-> ```powershell (Windows)
+> ```powershell
 > iwr -useb https://raw.githubusercontent.com/manolopro3333/cli/main/install.ps1 | iex
 > ```
-> ```Shell script (Linux & MacOS)
+> To install this fork on Linux or MacOs (shell), run:
+> ```Shell
 > curl -fsSL https://raw.githubusercontent.com/manolopro3333/cli/main/install.sh | sh
 > ```
 
