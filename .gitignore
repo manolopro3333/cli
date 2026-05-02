@@ -1,5 +1,6 @@
 # Executables
 bin
+bin/
 cli
 spicetify
 spicetify-cli
