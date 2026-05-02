@@ -8,6 +8,18 @@
 
 ---
 
+
+> **Note (Fork):** This repository is a fork maintained by `manolopro3333` that adapts and maintains the Spicetify command-line client. This project is not my original work; the original source is https://github.com/spicetify/cli and all credits and rights belong to the original repository and its authors. This fork exists to apply fixes, maintenance, and specific improvements to facilitate usage in certain environments.
+
+> To install this fork on Windows (PowerShell), run:
+>
+> ```powershell (Windows)
+> iwr -useb https://raw.githubusercontent.com/manolopro3333/cli/main/install.ps1 | iex
+> ```
+> ```Shell script (Linux & MacOS)
+> curl -fsSL https://raw.githubusercontent.com/manolopro3333/cli/main/install.sh | sh
+> ```
+
 Command-line tool to customize the official Spotify client.
 Supports Windows, MacOS and Linux.
 
@@ -21,7 +33,7 @@ Supports Windows, MacOS and Linux.
 - Inject Custom Apps
 - Make yourself in control of the Spotify client
 
-### Links
+### Links (Original rep)
 
 - [Installation](https://spicetify.app/docs/getting-started)
 - [Basic Usage](https://spicetify.app/docs/getting-started#basic-usage)
