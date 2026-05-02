@@ -115,7 +115,7 @@ function Get-Spicetify {
     Write-Host -Object "Downloading spicetify v$targetVersion..." -NoNewline
     $Parameters = @{
       Uri            = "https://github.com/$repoOwner/$repoName/releases/download/v$targetVersion/spicetify-$targetVersion-windows-$architecture.zip"
-      UseBasicParsin = $true
+      UseBasicParsing = $true
       OutFile        = $archivePath
     }
     Invoke-WebRequest @Parameters
