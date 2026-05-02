@@ -31,4 +31,8 @@ func main() {
 		},
 		Interval: 6 * time.Hour,
 	})
+
+	// Espera unos segundos antes de salir para permitir que cualquier
+	// proceso hijo o mensaje final se complete y la ventana se cierre.
+	time.Sleep(5 * time.Second)
 }

@@ -105,14 +105,35 @@ func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) {
 	cmd.InitSetting()
 
 	// Try to update Spicetify CLI if new version is available.
-	cmd.Update(spicetifyVersion)
-	utils.PrintSuccess("Update check completed")
+	latestVersion, updated := cmd.Update(spicetifyVersion)
+	if updated {
+		spicetifyVersion = latestVersion
+	}
 
 	// If patch is not applied, reapply it.
 	cfg := utils.ParseConfig(cmd.GetConfigPath())
 	setting := cfg.GetSection("Setting")
 	spotifyPath := utils.ReplaceEnvVarsInString(setting.Key("spotify_path").String())
 	appsPath := filepath.Join(spotifyPath, "Apps")
+	spotifyWasRunning := cmd.SpotifyRunning()
+
+	if updated {
+		if spotifyWasRunning {
+			cmd.SpotifyKill()
+		}
+		// After updating the CLI, ensure Spotify is restored to stock,
+		// re-backup (preprocess) and re-apply so preprocessing and assets
+		// are regenerated for the new version.
+		cmd.Restore()
+		cmd.Backup(spicetifyVersion, true)
+		cmd.Apply(spicetifyVersion)
+		utils.PrintSuccess("Reapplied Spicetify")
+		if spotifyWasRunning {
+			cmd.SpotifyStart()
+		}
+		utils.PrintSuccess("Update check completed")
+		return
+	}
 
 	backStat := backupstatus.Get(prefsPath, backupPath, backupVersion)
 	if !backStat.IsBackuped() {
@@ -126,8 +147,13 @@ func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) {
 	}
 
 	if !spotifystatus.Get(appsPath).IsApplied() {
-		cmd.SpotifyKill()
+		if spotifyWasRunning {
+			cmd.SpotifyKill()
+		}
 		cmd.Apply(spicetifyVersion)
 		utils.PrintSuccess("Reapplied Spicetify")
+		if spotifyWasRunning {
+			cmd.SpotifyStart()
+		}
 	}
 }

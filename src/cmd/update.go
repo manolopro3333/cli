@@ -12,19 +12,27 @@ import (
 	"github.com/manolopro3333/cli/src/utils"
 )
 
-func Update(currentVersion string) bool {
+const (
+	forkRepoURL     = "https://github.com/manolopro3333/cli"
+	originalRepoURL = "https://github.com/spicetify/cli"
+)
+
+func Update(currentVersion string) (string, bool) {
 	tagName, err := utils.FetchLatestTag()
 	if err != nil {
 		utils.PrintError("Cannot fetch latest release info")
 		utils.PrintError(err.Error())
-		return false
+		return currentVersion, false
 	}
 	if currentVersion == tagName {
 		utils.PrintSuccess("Spicetify is up-to-date.")
-		return false
+		return tagName, false
 	}
 
 	utils.PrintInfo("Latest release: " + tagName)
+	utils.PrintInfo("This release updates Spotify through Spicetify and should not take long.")
+	utils.PrintInfo("Fork: " + forkRepoURL)
+	utils.PrintInfo("Original: " + originalRepoURL)
 	var assetURL string = "https://github.com/manolopro3333/cli/releases/download/v" + tagName + "/spicetify-" + tagName + "-" + runtime.GOOS + "-"
 	var location string = os.TempDir() + "/spicetify-" + tagName
 
@@ -103,7 +111,7 @@ func Update(currentVersion string) bool {
 
 	utils.CheckExistAndDelete(exeOld)
 	utils.PrintSuccess("Successfully updated Spicetify to v" + tagName)
-	return true
+	return tagName, true
 }
 
 func permissionError(err error) {

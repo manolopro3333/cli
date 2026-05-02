@@ -9,6 +9,24 @@ import (
 	"strings"
 )
 
+func SpotifyRunning() bool {
+	switch runtime.GOOS {
+	case "windows":
+		isRunning := exec.Command("tasklist", "/FI", "ImageName eq spotify.exe")
+		result, _ := isRunning.Output()
+		return !bytes.Contains(result, []byte("No tasks are running"))
+	case "linux":
+		isRunning := exec.Command("pgrep", "-x", "spotify")
+		return isRunning.Run() == nil
+	case "darwin":
+		isRunning := exec.Command("sh", "-c", "ps aux | grep 'Spotify' | grep -v grep")
+		result, _ := isRunning.Output()
+		return len(result) > 0
+	default:
+		return false
+	}
+}
+
 func SpotifyKill() {
 	switch runtime.GOOS {
 	case "windows":

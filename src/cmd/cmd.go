@@ -289,6 +289,9 @@ func CheckUpdate(version string) {
 
 	if latestTag != version {
 		utils.PrintInfo("New version available: v" + latestTag + " (currently on: v" + version + ")")
+		utils.PrintInfo("This release updates Spotify through Spicetify and should not take long.")
+		utils.PrintInfo("Fork: https://github.com/manolopro3333/cli")
+		utils.PrintInfo("Original: https://github.com/spicetify/cli")
 		utils.PrintInfo(`Run "spicetify update" or use a package manager to update spicetify`)
 	}
 }
