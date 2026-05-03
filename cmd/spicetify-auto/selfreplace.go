@@ -40,7 +40,8 @@ func startSelfReplace(downloadPath, targetPath string) error {
 	cmd := exec.Command(downloadPath, selfReplaceArg, "--target", targetPath)
 	cmd.Stdout = io.Discard
 	cmd.Stderr = io.Discard
-	return cmd.Start()
+	err := cmd.Start()
+	return err
 }
 
 func selfReplace(targetPath string) error {
@@ -56,7 +57,8 @@ func selfReplace(targetPath string) error {
 	cmd := exec.Command(targetPath)
 	cmd.Stdout = io.Discard
 	cmd.Stderr = io.Discard
-	return cmd.Start()
+	err = cmd.Start()
+	return err
 }
 
 func replaceWithRetries(sourcePath, targetPath string, attempts int, delay time.Duration) error {

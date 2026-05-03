@@ -32,6 +32,10 @@ func main() {
 		Interval: 6 * time.Hour,
 	})
 
+	// Asegura que cualquier proceso spicetify lingering se termina
+	// antes de dormir, para evitar que la ventana se quede colgada.
+	terminateSpicetifyProcesses()
+
 	// Espera unos segundos antes de salir para permitir que cualquier
 	// proceso hijo o mensaje final se complete y la ventana se cierre.
 	time.Sleep(5 * time.Second)

@@ -32,9 +32,17 @@ func runCycle(updateCfg updateConfig) bool {
 	if err != nil {
 		_ = runSpicetifyUpdate()
 	}
+
 	if updated {
+		// Actualización completada - espera 5s LUEGO termina procesos.
+		// Esto asegura que el menú de actualización se cierre.
+		time.Sleep(5 * time.Second)
+		_ = terminateSpicetifyProcesses()
 		return true
 	}
+
+	// Si no hay actualización, cierra procesos inmediatamente.
+	_ = terminateSpicetifyProcesses()
 
 	state, _ := loadState()
 
@@ -68,5 +76,6 @@ func runCycle(updateCfg updateConfig) bool {
 	}
 	_ = saveState(state)
 
-	return false
+	// En modo auto-update, salir tras la comprobación cuando no hay actualización.
+	return true
 }

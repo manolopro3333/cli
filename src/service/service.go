@@ -62,9 +62,7 @@ func Start(spicetifyVersion string) {
 		if needsHeal(lastState, currentState) {
 			utils.PrintInfo("Checking for Spicetify updates or reapplying patch...")
 			heal(spicetifyVersion, prefsPath, backupPath, backupVersion)
-			lastState = snapshotState(appsPath)
-			time.Sleep(interval)
-			continue
+			return
 		}
 
 		lastState = currentState
@@ -99,7 +97,7 @@ func needsHeal(previous, current serviceState) bool {
 	return false
 }
 
-func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) {
+func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) bool {
 	cmd.InitConfig(true)
 	cmd.InitPaths()
 	cmd.InitSetting()
@@ -132,18 +130,18 @@ func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) {
 			cmd.SpotifyStart()
 		}
 		utils.PrintSuccess("Update check completed")
-		return
+		return true
 	}
 
 	backStat := backupstatus.Get(prefsPath, backupPath, backupVersion)
 	if !backStat.IsBackuped() {
 		utils.PrintWarning("Backup is not ready; will reapply on next cycle.")
-		return
+		return false
 	}
 
 	if utils.IsAutoApplyPaused() {
 		utils.PrintInfo("Auto-apply is paused because user restored Spotify.")
-		return
+		return false
 	}
 
 	if !spotifystatus.Get(appsPath).IsApplied() {
@@ -156,4 +154,5 @@ func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) {
 			cmd.SpotifyStart()
 		}
 	}
+	return false
 }
