@@ -122,7 +122,10 @@ func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) bool {
 		// After updating the CLI, ensure Spotify is restored to stock,
 		// re-backup (preprocess) and re-apply so preprocessing and assets
 		// are regenerated for the new version.
-		cmd.Restore()
+		cmd.RestoreAuto()
+		if err := utils.SetAutoApplyPaused(false); err != nil {
+			utils.PrintWarning("Failed to clear auto-apply pause after restore: " + err.Error())
+		}
 		cmd.Backup(spicetifyVersion, true)
 		cmd.Apply(spicetifyVersion)
 		utils.PrintSuccess("Reapplied Spicetify")
@@ -135,6 +138,30 @@ func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) bool {
 
 	backStat := backupstatus.Get(prefsPath, backupPath, backupVersion)
 	if !backStat.IsBackuped() {
+		if utils.IsAutoApplyPaused() {
+			utils.PrintInfo("Auto-apply is paused because user restored Spotify.")
+			return false
+		}
+
+		spotStat := spotifystatus.Get(appsPath)
+		if backStat.IsOutdated() {
+			utils.PrintInfo("Backup is outdated; rebuilding for the new Spotify version...")
+			if spotStat.IsBackupable() {
+				rebuildBackupAndApply(spicetifyVersion, spotifyWasRunning)
+				return true
+			}
+			restoreBackupAndApply(spicetifyVersion, spotifyWasRunning)
+			return true
+		}
+
+		if backStat.IsEmpty() {
+			if spotStat.IsBackupable() {
+				utils.PrintInfo("Backup is missing; creating a new backup...")
+				rebuildBackupAndApply(spicetifyVersion, spotifyWasRunning)
+				return true
+			}
+		}
+
 		utils.PrintWarning("Backup is not ready; will reapply on next cycle.")
 		return false
 	}
@@ -155,4 +182,32 @@ func heal(spicetifyVersion, prefsPath, backupPath, backupVersion string) bool {
 		}
 	}
 	return false
+}
+
+func rebuildBackupAndApply(spicetifyVersion string, spotifyWasRunning bool) {
+	if spotifyWasRunning {
+		cmd.SpotifyKill()
+	}
+	cmd.Backup(spicetifyVersion, true)
+	cmd.Apply(spicetifyVersion)
+	utils.PrintSuccess("Rebuilt backup and reapplied Spicetify")
+	if spotifyWasRunning {
+		cmd.SpotifyStart()
+	}
+}
+
+func restoreBackupAndApply(spicetifyVersion string, spotifyWasRunning bool) {
+	if spotifyWasRunning {
+		cmd.SpotifyKill()
+	}
+	cmd.RestoreAuto()
+	if err := utils.SetAutoApplyPaused(false); err != nil {
+		utils.PrintWarning("Failed to clear auto-apply pause after restore: " + err.Error())
+	}
+	cmd.Backup(spicetifyVersion, true)
+	cmd.Apply(spicetifyVersion)
+	utils.PrintSuccess("Restored Spotify, rebuilt backup, and reapplied Spicetify")
+	if spotifyWasRunning {
+		cmd.SpotifyStart()
+	}
 }

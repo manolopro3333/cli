@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"os"
 	"os/exec"
 	"runtime"
 	"time"
@@ -19,7 +18,13 @@ func runSpicetifyApply() error {
 	cmd := exec.Command(spicetifyPath, "-q", "backup", "apply")
 	cmd.Stdout = io.Discard
 	cmd.Stderr = io.Discard
-	return cmd.Run()
+	if err := cmd.Run(); err != nil {
+		cmd = exec.Command(spicetifyPath, "-q", "restore", "backup", "apply")
+		cmd.Stdout = io.Discard
+		cmd.Stderr = io.Discard
+		return cmd.Run()
+	}
+	return nil
 }
 
 // runSpicetifyUpdateWithTimeout runs `spicetify -q update` with a timeout

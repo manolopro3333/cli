@@ -155,6 +155,20 @@ func clearBackup() {
 // Restore uses backup to revert every changes made by Spicetify.
 func Restore() {
 	CheckStates()
+	restoreFromBackup()
+
+	if err := utils.SetAutoApplyPaused(true); err != nil {
+		utils.PrintWarning(fmt.Sprintf("Failed to set auto-apply pause: %s", err.Error()))
+	}
+}
+
+// RestoreAuto restores Spotify without checking backup state.
+// It is used by automated recovery flows that need to repair an outdated backup.
+func RestoreAuto() {
+	restoreFromBackup()
+}
+
+func restoreFromBackup() {
 	spinner, _ := utils.Spinner.Start("Restoring Spotify")
 	if err := os.RemoveAll(appDestPath); err != nil {
 		spinner.Fail("Failed to restore Spotify")
@@ -164,10 +178,6 @@ func Restore() {
 	if err := utils.Copy(backupFolder, appDestPath, false, []string{".spa"}); err != nil {
 		spinner.Fail("Failed to restore Spotify")
 		utils.Fatal(err)
-	}
-
-	if err := utils.SetAutoApplyPaused(true); err != nil {
-		utils.PrintWarning(fmt.Sprintf("Failed to set auto-apply pause: %s", err.Error()))
 	}
 
 	spinner.Success("Restored Spotify")
