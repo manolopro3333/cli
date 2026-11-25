@@ -47,11 +47,11 @@ func runSpicetifyUpdateWithTimeout(timeout time.Duration) error {
 	cmd.Stderr = io.Discard
 
 	err = cmd.Run()
-	
+
 	// Always terminate lingering processes after running update,
 	// regardless of success or timeout, to ensure the UI closes.
 	_ = terminateUpdateProcesses()
-	
+
 	return err
 }
 

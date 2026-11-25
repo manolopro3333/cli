@@ -14,10 +14,10 @@ priv/
 
 # Node.js
 node_modules
-package-lock.json
-package.json
+
+# Generated wrapper bundle
+jsHelper/spicetifyWrapper.js
+jsHelper/spicetifyWrapper.js.map
 
 # Logs
 install.log
-
-pnpm-lock.yaml

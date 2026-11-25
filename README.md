@@ -1,4 +1,4 @@
-<h3 align="center"><a href="https://spicetify.app/"><img src="https://i.imgur.com/iwcLITQ.png" width="600px"></a></h3>
+﻿<h3 align="center"><a href="https://spicetify.app/"><img src="https://i.imgur.com/iwcLITQ.png" width="600px"></a></h3>
 <p align="center">
   <a href="https://goreportcard.com/report/github.com/manolopro3333/cli"><img src="https://goreportcard.com/badge/github.com/manolopro3333/cli"></a>
   <a href="https://github.com/manolopro3333/cli/releases/latest"><img src="https://img.shields.io/github/release/spicetify/cli/all.svg?colorB=97CA00&label=latest%20version"></a>
@@ -9,7 +9,7 @@
 ---
 
 
-> **Note (Fork):** This repository is a fork maintained by `manolopro3333` that adapts and maintains the Spicetify command-line client. This project is not my original work; the original source is https://github.com/spicetify/cli and all credits and rights belong to the original repository and its authors. This fork exists to apply fixes, maintenance, and specific improvements to facilitate usage in certain environments.
+> **Note (Fork):** This repository is a fork maintained by `manolopro3333` that adapts and maintains the Spicetify command-line client. This project is not my original work; the original source is https://github.com/manolopro3333/cli and all credits and rights belong to the original repository and its authors. This fork exists to apply fixes, maintenance, and specific improvements to facilitate usage in certain environments.
 
 > To install this fork on Windows (PowerShell), run:
 > ```powershell

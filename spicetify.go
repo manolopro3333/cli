@@ -13,7 +13,6 @@ import (
 	"sync"
 
 	"github.com/manolopro3333/cli/src/cmd"
-	"github.com/manolopro3333/cli/src/service"
 	spotifystatus "github.com/manolopro3333/cli/src/status/spotify"
 	"github.com/manolopro3333/cli/src/utils"
 	"github.com/manolopro3333/cli/src/utils/isAdmin"
@@ -53,8 +52,14 @@ func init() {
 	log.SetOutput(colorable.NewColorableStdout())
 
 	// Separates flags and commands
+	parseFlags := true
 	for _, v := range os.Args[1:] {
-		if len(v) > 0 && v[0] == '-' {
+		if parseFlags && v == "--" {
+			parseFlags = false
+			continue
+		}
+
+		if parseFlags && len(v) > 0 && v[0] == '-' {
 			if len(v) > 2 && v[1] != '-' {
 				for _, char := range v[1:] {
 					flags = append(flags, "-"+string(char))
@@ -268,10 +273,6 @@ func main() {
 
 		watchGroup.Wait()
 		return
-
-	case "service":
-		service.Start(version)
-		return
 	}
 
 	cmd.InitPaths()
@@ -394,9 +395,6 @@ enable-devtools     Enable Spotify's developer tools.
 watch               Enter watch mode.
                     To update on change, use with any combination of the following flags:
                         "-e" (for extensions),
-
-	service             Run background auto-update and auto-reapply monitor.
-	                   Use at login/startup for automatic maintenance.
                         "-a" (for custom apps),
                         "-s" (for the active theme; color.ini, user.css, theme.js, and assets)
                         "-l" (for all of the above)
@@ -502,6 +500,8 @@ upgrade|update      Update spicetify to the latest version if an update is avail
 
 --bypass-admin      Bypass admin or root (sudo) check. NOT RECOMMENDED
 
+--                  Stop parsing flags; treat remaining arguments as command values
+
 -c, --config        Print config file path and quit
 
 -h, --help          Print this help text and quit
@@ -540,6 +540,8 @@ replace_colors <0 | 1>
 spotify_launch_flags <string>
     Command-line flags used when launching/restarting Spotify.
     Separate each flag with "|".
+    To set flags from the CLI, place "--" before the value.
+    Example: spicetify config spotify_launch_flags -- "--flag-1|--flag-2"
     List of valid flags: https://spicetify.app/docs/development/spotify-cli-flags
 
 always_enable_devtools <0 | 1>

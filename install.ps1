@@ -1,4 +1,5 @@
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 #region Variables
@@ -142,7 +143,9 @@ function Add-SpicetifyToPath {
   }
   end {
     [Environment]::SetEnvironmentVariable('PATH', $path, $user)
-    $env:PATH = $path
+    if (($env:PATH -split ';') -notcontains $spicetifyFolderPath) {
+      $env:PATH = "$env:PATH;$spicetifyFolderPath"
+    }
     Write-Success
   }
 }
@@ -227,6 +230,33 @@ else {
 #endregion Checks
 
 #region Spicetify
+$installedSpicetify = Join-Path -Path $spicetifyFolderPath -ChildPath 'spicetify.exe'
+if (-not (Test-Path -LiteralPath $installedSpicetify -PathType Leaf)) {
+  $installedCommand = Get-Command -Name 'spicetify' -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+  if ($installedCommand) {
+    $installedSpicetify = $installedCommand.Source
+  }
+  else {
+    $installedSpicetify = $null
+  }
+}
+
+if ($installedSpicetify) {
+  $Host.UI.RawUI.Flushinputbuffer()
+  $choices = [System.Management.Automation.Host.ChoiceDescription[]] @(
+    (New-Object System.Management.Automation.Host.ChoiceDescription '&Yes', 'Run spicetify update.'),
+    (New-Object System.Management.Automation.Host.ChoiceDescription '&No', 'Continue with installation.')
+  )
+  $choice = $Host.UI.PromptForChoice('', 'Spicetify is already installed. Do you want to fix your installation?', $choices, 0)
+  if ($choice -eq 0) {
+    & $installedSpicetify update
+    if ($LASTEXITCODE -ne 0) {
+      throw "Spicetify update failed with exit code $LASTEXITCODE."
+    }
+    return
+  }
+}
+
 Move-OldSpicetifyFolder
 Install-Spicetify
 Enable-SpicetifyServiceStartup

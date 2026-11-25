@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 
 	"github.com/go-ini/ini"
-	"github.com/pterm/pterm"
 	"github.com/manolopro3333/cli/src/utils"
+	"github.com/pterm/pterm"
 )
 
 // EditColor changes one or multiple colors' values
