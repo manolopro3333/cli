@@ -12,27 +12,19 @@ import (
 	"github.com/manolopro3333/cli/src/utils"
 )
 
-const (
-	forkRepoURL     = "https://github.com/manolopro3333/cli"
-	originalRepoURL = "https://github.com/spicetify/cli"
-)
-
-func Update(currentVersion string) (string, bool) {
+func Update(currentVersion string) bool {
 	tagName, err := utils.FetchLatestTag()
 	if err != nil {
 		utils.PrintError("Cannot fetch latest release info")
 		utils.PrintError(err.Error())
-		return currentVersion, false
+		return false
 	}
 	if currentVersion == tagName {
 		utils.PrintSuccess("Spicetify is up-to-date.")
-		return tagName, false
+		return false
 	}
 
 	utils.PrintInfo("Latest release: " + tagName)
-	utils.PrintInfo("This release updates Spotify through Spicetify and should not take long.")
-	utils.PrintInfo("Fork: " + forkRepoURL)
-	utils.PrintInfo("Original: " + originalRepoURL)
 	var assetURL string = "https://github.com/manolopro3333/cli/releases/download/v" + tagName + "/spicetify-" + tagName + "-" + runtime.GOOS + "-"
 	var location string = os.TempDir() + "/spicetify-" + tagName
 
@@ -65,18 +57,24 @@ func Update(currentVersion string) (string, bool) {
 
 	resp2, err := http.Get(assetURL)
 	if err != nil {
+		out.Close()
 		spinner.Fail("Failed to download Spicetify")
 		utils.Fatal(err)
 	}
-	defer resp2.Body.Close()
 
 	if resp2.StatusCode != http.StatusOK {
+		resp2.Body.Close()
+		out.Close()
 		spinner.Fail("Failed to download Spicetify")
 		utils.Fatal(fmt.Errorf("unexpected HTTP status: %s for %s", resp2.Status, assetURL))
 	}
 
+	defer resp2.Body.Close()
+
 	_, err = io.Copy(out, resp2.Body)
 	if err != nil {
+		resp2.Body.Close()
+		out.Close()
 		spinner.Fail("Failed to download Spicetify")
 		utils.Fatal(err)
 	}
@@ -111,7 +109,7 @@ func Update(currentVersion string) (string, bool) {
 
 	utils.CheckExistAndDelete(exeOld)
 	utils.PrintSuccess("Successfully updated Spicetify to v" + tagName)
-	return tagName, true
+	return true
 }
 
 func permissionError(err error) {

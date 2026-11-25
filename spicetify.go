@@ -278,7 +278,7 @@ func main() {
 
 	utils.PrintBold("spicetify v" + version)
 	if slices.Contains(commands, "upgrade") || slices.Contains(commands, "update") {
-		latestVersion, updateStatus := cmd.Update(version)
+		updateStatus := cmd.Update(version)
 		spotifyPath := filepath.Join(cmd.GetSpotifyPath(), "Apps")
 		ex, err := os.Executable()
 		if err != nil {
@@ -302,10 +302,10 @@ func main() {
 		spotStat := spotifystatus.Get(spotifyPath)
 		if spotStat.IsBackupable() {
 			utils.PrintNote("spicetify is up-to-date! If you ran this because spicetify disappeared after Spotify updated, we'll attempt to fix it for you right now.")
-			cmd.Backup(latestVersion, true)
+			cmd.Backup(version, true)
 			cmd.CheckStates()
 			cmd.InitSetting()
-			cmd.Apply(latestVersion)
+			cmd.Apply(version)
 			if !noRestart {
 				cmd.SpotifyRestart()
 			}

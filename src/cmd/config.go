@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/go-ini/ini"
@@ -19,9 +20,7 @@ func EditConfig(args []string) {
 		switch field {
 		case "extensions", "custom_apps":
 			arrayType(featureSection, field, value)
-		case "spotify_launch_flags":
-			continue
-		case "prefs_path", "spotify_path", "current_theme", "color_scheme":
+		case "prefs_path", "spotify_path", "current_theme", "color_scheme", "spotify_launch_flags":
 			stringType(settingSection, field, value)
 
 		default:
@@ -178,6 +177,7 @@ func arrayType(section *ini.Section, field, value string) {
 	for k := range allExts {
 		newList = append(newList, k)
 	}
+	sort.Strings(newList)
 
 	key.SetValue(strings.Join(newList, "|"))
 	changeSuccess(field, strings.Join(newList, "|"))
